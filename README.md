@@ -101,9 +101,138 @@ def minimax(game)
         return scores[min_score_index]
     end
 end
+## Program
+```python
+#MINI MAX SEARCH FOR A TIC-TAC-TOE GAME
+def init():
+    current_state=[['.','.','.'],
+               ['.','.','.'],
+               ['.','.','.']]
+    player_turn='X'
+def min():
+    minv=+2
+    qx=None
+    qy=None
+    result=is_end()
+    if result=='O':
+        return(+1,0,0)
+    elif result=='X':
+        return (-1,0,0)
+    elif result=='.':
+        return(0,0,0)
+    for i in range(3):
+        for j in range(3):
+            if current_state[i][j]=='.':
+                current_state[i][j]='X'
+                (m,minx,miny)=max()
+                if m<minv:
+                    minv=m
+                    qx=i
+                    qy=j
+                current_state[i][j]='.'
+    return (minv,qx,qy)
+def max():
+    maxv=-2
+    px=None
+    py=None
+    result=is_end()
+    if result=='O':
+        return(+1,0,0)
+    elif result=='X':
+        return (-1,0,0)
+    elif result=='.':
+        return(0,0,0)
+    for i in range(3):
+        for j in range(3):
+            if current_state[i][j]=='.':
+                current_state[i][j]='O'
+                (m,maxx,maxy)=min()
+                if m>maxv:
+                    maxv=m
+                    px=i
+                    py=j
+                current_state[i][j]='.'
+    return (maxv,px,py)
 
+def drawboard():
+    for i in range(3):
+        for j in range(3):
+            print("{}|".format(current_state[i][j]),end="")
+        print()
+def is_end():
+    #horizontal win
+    for i in range(3):
+        if current_state[i]==['X','X','X']:
+            return 'X'
+        elif current_state[i]==['O','O','O']:
+            return 'O'
+    #Vertical Win
+    for i in range(3):
+        if (current_state[0][i]!='.' and current_state[0][i]==current_state[1][i] and
+            current_state[1][i]==current_state[2][i]):
+                return current_state[0][i]
+    #diagonal Win
+    if (current_state[0][0]!='.' and current_state[0][0]==current_state[1][1] and
+    current_state[1][1]==current_state[2][2]):
+                return current_state[0][0]
+    #inverse Diagonal Win
+    if (current_state[0][2]!='.' and current_state[0][2]==current_state[1][1] and
+            current_state[1][1]==current_state[2][0]):
+                return current_state[0][2]
+    #Whole Board Full
+    for i in range(3):
+        for j in range(3):
+            if current_state[i][j]=='.':
+                return None
+    return '.'
+def is_valid(px,py):
+    if px<0 or px>2 or py<0 or py>2:
+        return False
+    elif current_state[px][py]!='.':
+        return False
+    else:
+        return True
+def play():
+    player_turn='X'
+    while True:
+        drawboard()
+        result=is_end()
+        if result!=None:
+            if result=='X':
+                print("The Winner is X")
+            elif result=='O':
+                print("The Winner is O")
+            elif result=='.':
+                print("It's a Tie")
+            init()
+            return
+        if player_turn=='X':
+            while True:
+                (m,qx,qy)=min()
+                print("Recommended Move:{}".format((qx,qy)))
+                px=int(input())
+                py=int(input())
+                (qx,qy)=(px,py)
+                if is_valid(px,py):
+                    current_state[px][py]='X'
+                    player_turn='O'
+                    break
+                else:
+                    print("Its not a Valid Move")
+        else:
+            (m,px,py)=max()
+            current_state[px][py]='O'
+            player_turn='X'
+current_state=[['.','.','.'],
+               ['.','.','.'],
+               ['.','.','.']]
+play()
+
+
+
+```
 <hr>
-<h2>Sample Input and Output</h2>
+<h2>Output</h2>
 
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/6b668685-8bcc-43c5-b5c2-ddd43f3da84a)
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/8ca1b08a-8312-4ef5-89df-e69b7b2c3fa2)
